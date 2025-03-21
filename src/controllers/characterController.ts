@@ -11,47 +11,50 @@ const GenerateCharacterSchema = z.object({
 });
 
 // Generate a character based on text description
-export async function generateCharacter(req: Request, res: Response) {
-  try {
-    const validationResult = GenerateCharacterSchema.safeParse(req.body);
-    
-    if (!validationResult.success) {
-      return res.status(400).json({
+// In your characterController.ts file:
+
+export async function generateCharacter(req: Request, res: Response): Promise<void> {
+    try {
+      const validationResult = GenerateCharacterSchema.safeParse(req.body);
+      
+      if (!validationResult.success) {
+        res.status(400).json({
+          status: 'error',
+          message: 'Invalid input',
+          errors: validationResult.error.format()
+        });
+        return;
+      }
+      
+      const { description, url } = validationResult.data;
+      
+      // If URL is provided, extract content first
+      let enhancedDescription = description;
+      if (url) {
+        try {
+          const extractedContent = await extractContentFromUrl(url);
+          enhancedDescription = `${description}\n\nAdditional context from URL: ${extractedContent}`;
+        } catch (error) {
+          console.error('Error extracting content from URL:', error);
+          // Continue with original description if URL extraction fails
+        }
+      }
+      
+      // Generate character details using Groq
+      const characterData = await generateCharacterDetails(enhancedDescription);
+      
+      res.status(200).json({
+        status: 'success',
+        data: characterData
+      });
+    } catch (error) {
+      console.error('Error generating character:', error);
+      res.status(500).json({
         status: 'error',
-        message: 'Invalid input',
-        errors: validationResult.error.format()
+        message: 'Failed to generate character'
       });
     }
-    
-    const { description, url } = validationResult.data;
-    
-    // If URL is provided, extract content first
-    let enhancedDescription = description;
-    if (url) {
-      try {
-        const extractedContent = await extractContentFromUrl(url);
-        enhancedDescription = `${description}\n\nAdditional context from URL: ${extractedContent}`;
-      } catch (error) {
-        console.error('Error extracting content from URL:', error);
-        // Continue with original description if URL extraction fails
-      }
-    }
-    
-    // Generate character details using Groq
-    const characterData = await generateCharacterDetails(enhancedDescription);
-    
-    return res.status(200).json({
-      status: 'success',
-      data: characterData
-    });
-  } catch (error) {
-    console.error('Error generating character:', error);
-    return res.status(500).json({
-      status: 'error',
-      message: 'Failed to generate character'
-    });
   }
-}
 
 // Extract character details from a URL
 export async function getCharacterFromUrl(req: Request, res: Response) {

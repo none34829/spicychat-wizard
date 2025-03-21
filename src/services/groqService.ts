@@ -2,9 +2,7 @@ import Groq from 'groq-sdk';
 import { CharacterData } from '../types';
 
 // Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY
-});
+const groq = new Groq({apiKey: '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' });
 
 /**
  * Generate character details using Groq's LLM

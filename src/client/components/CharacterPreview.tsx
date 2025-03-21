@@ -89,7 +89,17 @@ export default function CharacterPreview({ character }: CharacterPreviewProps) {
             </button>
             {expandedSection === 'conversation' && (
               <div className="px-4 py-3 bg-gray-50">
-                <p className="whitespace-pre-line">{character.exampleConversation}</p>
+                {Array.isArray(character.exampleConversation) ? (
+  character.exampleConversation.map((entry, index) => (
+    <div key={index} className="border p-2 rounded mb-2">
+      <p><strong>You:</strong> {entry.user}</p>
+      <p><strong>{character.name}:</strong> {entry.character}</p>
+    </div>
+  ))
+) : (
+  <p className="text-red-500">Invalid conversation format</p>
+)}
+
               </div>
             )}
           </div>
