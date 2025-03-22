@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
@@ -34,7 +37,14 @@ export function createServer() {
   
   // Error handling middleware
   app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-    console.error(err.stack);
+    console.error('Error details:', {
+      message: err.message,
+      stack: err.stack,
+      path: req.path,
+      method: req.method,
+      body: req.body
+    });
+    
     res.status(500).json({
       status: 'error',
       message: 'Something went wrong on the server',
@@ -45,12 +55,12 @@ export function createServer() {
   return app;
 }
 
-// Add this code to actually start the server
-if (require.main === module) {
-  const app = createServer();
-  const PORT = process.env.PORT || 3000;
-  
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
+// Start the server
+const app = createServer();
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+  console.log(`API endpoints available at http://localhost:${PORT}/api`);
+  console.log(`Image generation endpoint: http://localhost:${PORT}/api/image/generate`);
+});

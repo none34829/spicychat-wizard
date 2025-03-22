@@ -17,6 +17,8 @@ const STYLE_OPTIONS = [
   { value: 'oil painting', label: 'Oil Painting' },
   { value: 'watercolor', label: 'Watercolor' },
   { value: 'sketch', label: 'Sketch' },
+  { value: 'character portrait', label: 'Character Portrait' },
+  { value: 'other', label: 'Other (Custom)' }
 ];
 
 export default function ImageGenerator({ 
@@ -26,6 +28,7 @@ export default function ImageGenerator({
   setError 
 }: ImageGeneratorProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>('realistic portrait');
+  const [customStyle, setCustomStyle] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   
   // Generate the image
@@ -35,6 +38,13 @@ export default function ImageGenerator({
     setError('');
     
     try {
+      // Use custom style if "other" is selected, otherwise use the selected style
+      const finalStyle = selectedStyle === 'other' ? customStyle : selectedStyle;
+      
+      if (selectedStyle === 'other' && !customStyle.trim()) {
+        throw new Error('Please enter a custom style description');
+      }
+      
       const response = await fetch('/api/image/generate', {
         method: 'POST',
         headers: {
@@ -46,7 +56,7 @@ export default function ImageGenerator({
             title: character.title,
             persona: character.persona,
           },
-          style: selectedStyle,
+          style: finalStyle,
         }),
       });
       
@@ -62,8 +72,13 @@ export default function ImageGenerator({
         throw new Error('Invalid response format');
       }
     } catch (error) {
-      console.error('Error generating image:', error);
-      setError(error instanceof Error ? error.message : 'An unknown error occurred');
+      if (error instanceof Error) {
+        console.error('Frontend error when generating image:', error.message);
+        setError(error.message);
+      } else {
+        console.error('Frontend unknown error:', error);
+        setError('An unknown error occurred');
+      }
     } finally {
       setIsLoading(false);
       setIsGenerating(false);
@@ -99,6 +114,27 @@ export default function ImageGenerator({
           ))}
         </select>
       </div>
+      
+      {/* Custom style input field when "Other" is selected */}
+      {selectedStyle === 'other' && (
+        <div className="mb-4">
+          <label htmlFor="customStyle" className="block text-sm font-medium text-gray-700 mb-1">
+            Custom Style Description
+          </label>
+          <input
+            id="customStyle"
+            type="text"
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            placeholder="E.g., cyberpunk style, steampunk portrait, etc."
+            value={customStyle}
+            onChange={(e) => setCustomStyle(e.target.value)}
+            disabled={isLoading}
+          />
+          <p className="text-xs text-gray-500 mt-1">
+            Be descriptive to get the best results. Example: "cyberpunk character with neon lighting"
+          </p>
+        </div>
+      )}
       
       <div className="flex justify-center">
         <button

@@ -1,6 +1,7 @@
 {
   "description": "",
   "dependencies": {
+    "@runware/sdk-js": "^1.1.37",
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/node": "^22.13.10",
@@ -35,7 +36,8 @@
     "dev": "vite",
     "build": "vite build",
     "start": "node dist/server.js",
-    "server": "nodemon src/server.ts",
-    "dev:full": "concurrently \"npm run server\" \"npm run dev\""
+    "server": "cross-env DEBUG=express:* ts-node src/server.ts",
+    "server:dev": "cross-env DEBUG=express:* nodemon --watch src --ext ts,js --exec ts-node src/server.ts",
+    "dev:full": "concurrently \"npm run server:dev\" \"npm run dev\""
   }
 }
