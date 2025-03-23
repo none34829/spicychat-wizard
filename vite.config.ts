@@ -3,7 +3,8 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   root: 'src/client',
   build: {
-    outDir: '../../../dist/client',
+    outDir: '../../dist/client',
+    emptyOutDir: true,
   },
   server: {
     proxy: {
