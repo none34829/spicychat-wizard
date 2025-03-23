@@ -33,7 +33,7 @@ export async function generateCharacterImage(prompt: string, style: string): Pro
         negativePrompt: "blurry, deformed, extra limbs, bad anatomy, poorly drawn face",
         width: 512,
         height: 512,
-        model: "rundiffusion:130@100", // ensure this model is valid per Runware docs
+        model: "rundiffusion:130@100", 
         steps: 20,
         CFGScale: 7.5,
         numberResults: 1,

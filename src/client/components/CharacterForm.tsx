@@ -6,12 +6,36 @@ interface CharacterFormProps {
   onGenerate: (character: CharacterData) => void;
   setIsGenerating: (isGenerating: boolean) => void;
   setError: (error: string) => void;
+  className?: string;
 }
 
-export default function CharacterForm({ onGenerate, setIsGenerating, setError }: CharacterFormProps) {
+export default function CharacterForm({ onGenerate, setIsGenerating, setError, className }: CharacterFormProps) {
   const [description, setDescription] = useState<string>('');
   const [url, setUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isUrlValid, setIsUrlValid] = useState<boolean>(true);
+  
+  // Validate URL
+  const validateUrl = (value: string) => {
+    if (!value) {
+      setIsUrlValid(true);
+      return;
+    }
+    
+    try {
+      new URL(value);
+      setIsUrlValid(true);
+    } catch {
+      setIsUrlValid(false);
+    }
+  };
+  
+  // Handle URL change
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setUrl(value);
+    validateUrl(value);
+  };
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,6 +43,11 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError }:
     
     if (!description.trim()) {
       setError('Please provide a character description');
+      return;
+    }
+    
+    if (url && !isUrlValid) {
+      setError('Please provide a valid URL or leave the field empty');
       return;
     }
     
@@ -62,7 +91,7 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError }:
     <div>
       <h2 className="text-xl font-semibold mb-4">Character Details</h2>
       
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
         <div className="mb-4">
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
             Character Description*
@@ -104,7 +133,7 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError }:
           <button
             type="submit"
             className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center"
-            disabled={isLoading || !description.trim()}
+            disabled={isLoading || !description.trim() || (url.trim() !== '' && !isUrlValid)}
           >
             {isLoading ? (
               <>

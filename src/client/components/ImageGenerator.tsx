@@ -7,6 +7,7 @@ interface ImageGeneratorProps {
   onImageGenerated: (imageUrl: string) => void;
   setIsGenerating: (isGenerating: boolean) => void;
   setError: (error: string) => void;
+  className?: string;
 }
 
 const STYLE_OPTIONS = [
@@ -25,7 +26,8 @@ export default function ImageGenerator({
   character, 
   onImageGenerated, 
   setIsGenerating, 
-  setError 
+  setError,
+  className
 }: ImageGeneratorProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>('realistic portrait');
   const [customStyle, setCustomStyle] = useState<string>('');
@@ -86,7 +88,7 @@ export default function ImageGenerator({
   };
   
   return (
-    <div className="mt-6">
+    <div className={`space-y-4 ${className}`}>
       <h2 className="text-xl font-semibold mb-4">Generate Character Image</h2>
       
       <div className="bg-purple-50 p-4 rounded-lg mb-4">

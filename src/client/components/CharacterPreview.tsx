@@ -3,9 +3,10 @@ import { CharacterData } from '../../types';
 
 interface CharacterPreviewProps {
   character: CharacterData;
+  className?: string;
 }
 
-export default function CharacterPreview({ character }: CharacterPreviewProps) {
+export default function CharacterPreview({ character, className }: CharacterPreviewProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   
   // Toggle section expansion
@@ -18,7 +19,7 @@ export default function CharacterPreview({ character }: CharacterPreviewProps) {
   };
   
   return (
-    <div className="mb-6">
+    <div className={`space-y-4 ${className}`}>
       <h2 className="text-xl font-semibold mb-4">Character Preview</h2>
       
       <div className="border rounded-lg overflow-hidden">

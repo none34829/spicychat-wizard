@@ -10,9 +10,6 @@ const GenerateCharacterSchema = z.object({
   url: z.string().url().optional(),
 });
 
-// Generate a character based on text description
-// In your characterController.ts file:
-
 export async function generateCharacter(req: Request, res: Response): Promise<void> {
     try {
       const validationResult = GenerateCharacterSchema.safeParse(req.body);
