@@ -39,7 +39,8 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    // Ensure we prevent default at the very start
+    if (e) e.preventDefault();
     
     if (!description.trim()) {
       setError('Please provide a character description');
@@ -89,42 +90,44 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
   
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Character Details</h2>
+      <h2 className="form-section-title">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        Character Details
+      </h2>
       
-      <form onSubmit={handleSubmit} className={`space-y-4 ${className}`}>
-        <div className="mb-4">
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
-            Character Description*
-          </label>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(e);
+      }}>
+        <div className="form-group">
+          <label htmlFor="description">Character Description*</label>
           <textarea
             id="description"
             rows={5}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="Describe your character in detail. The more information you provide, the better the result will be."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
             disabled={isLoading}
           ></textarea>
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="help-text">
             Example: "A wise old wizard who specializes in fire magic. He is kind but stern, and has a soft spot for teaching young mages."
           </p>
         </div>
         
-        <div className="mb-6">
-          <label htmlFor="url" className="block text-sm font-medium text-gray-700 mb-1">
-            Reference URL (Optional)
-          </label>
+        <div className="form-group">
+          <label htmlFor="url">Reference URL (Optional)</label>
           <input
             type="url"
             id="url"
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             placeholder="https://example.com/reference-content"
             value={url}
-            onChange={(e) => setUrl(e.target.value)}
+            onChange={handleUrlChange}
             disabled={isLoading}
           />
-          <p className="text-xs text-gray-500 mt-1">
+          <p className="help-text">
             You can provide a URL to a webpage that contains additional information about your character.
           </p>
         </div>
@@ -132,16 +135,21 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
         <div className="flex justify-center">
           <button
             type="submit"
-            className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors flex items-center"
             disabled={isLoading || !description.trim() || (url.trim() !== '' && !isUrlValid)}
+            className="btn btn-primary btn-lg"
           >
             {isLoading ? (
               <>
-                <LoadingSpinner size="small" /> 
-                <span className="ml-2">Generating...</span>
+                <div className="loader"></div>
+                <span>Generating...</span>
               </>
             ) : (
-              'Generate Character'
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Generate Character
+              </>
             )}
           </button>
         </div>
