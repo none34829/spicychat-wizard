@@ -2,6 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: 'src/client',
+  base: process.env.VITE_BASE_PATH || "/spicychat-wizard",
   build: {
     outDir: '../../dist/client',
     emptyOutDir: true,

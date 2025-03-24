@@ -1,11 +1,22 @@
+/* Import Google Fonts first */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Then include Tailwind directives */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html, body {
   font-family: 'Inter', sans-serif;
+  background-color: #f5f3ff;
 }
 
+/* Custom grid background */
+.bg-grid-slate-900\/\[0\.04\] {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20'%3E%3Cpath fill='%23000' fill-opacity='0.05' d='M1,1 L19,1 L19,19 L1,19 L1,1 Z M0,0 L20,0 L20,20 L0,20 L0,0 Z'/%3E%3C/svg%3E");
+}
+
+/* Animations */
 .animate-spin {
   animation: spin 1s linear infinite;
 }
@@ -17,4 +28,103 @@ html, body {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* Add a nice glow to buttons */
+.glow-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-effect::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.glow-effect:hover::after {
+  opacity: 1;
+}
+
+/* Better form inputs */
+@layer components {
+  .input-fancy {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200 shadow-sm;
+  }
+  
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-6 py-3 text-base font-medium rounded-xl shadow-md transition-all duration-200 glow-effect;
+  }
+
+  /* Vibrant hard-coded styles that will work regardless of Tailwind */
+  .wizard-card {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    border: 1px solid #ddd6fe;
+    overflow: hidden;
+  }
+
+  .wizard-header {
+    background: linear-gradient(to right, #7c3aed, #6366f1);
+    height: 8px;
+    width: 100%;
+  }
+
+  .wizard-button {
+    background: linear-gradient(to right, #7c3aed, #6366f1);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3);
+    transition: all 0.2s ease;
+  }
+  
+  .wizard-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.4);
+  }
+}
+
+/* Loading animation */
+.loader {
+  width: 30px;
+  height: 30px;
+  border: 3px solid #ffffff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Gradient text */
+.gradient-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to right, #7c3aed, #6366f1);
+}
+
+/* Main container styling */
+#root {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #f5f3ff, #ede9fe);
 }
