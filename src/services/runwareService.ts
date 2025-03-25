@@ -13,18 +13,17 @@ export async function generateCharacterImage(prompt: string, style: string): Pro
       throw new Error('RUNWARE_API_KEY is not configured');
     }
 
-    // If style is provided and not already in the prompt, prepend it
+    // if style is provided and not already in the prompt, prepend it
     const finalPrompt = style && !prompt.includes(style) 
       ? `${style} ${prompt}` 
       : prompt;
       
     console.log('Final prompt:', finalPrompt);
 
-    // Build the payload as an array of tasks
     const payload = [
       {
         taskType: "authentication",
-        apiKey: process.env.RUNWARE_API_KEY  // or your key as a string
+        apiKey: process.env.RUNWARE_API_KEY  
       },
       {
         taskType: "imageInference",
@@ -64,18 +63,14 @@ export async function generateCharacterImage(prompt: string, style: string): Pro
     console.log('Runware API response status:', response.status);
     console.log('Runware API response data:', JSON.stringify(response.data, null, 2));
     
-    // Handle different possible response formats
     let imageUrl;
     
-    // Format 1: response.data.tasks[0].imageURL
     if (response.data?.tasks?.[0]?.imageURL) {
       imageUrl = response.data.tasks[0].imageURL;
     }
-    // Format 2: response.data.data[0].imageURL
     else if (response.data?.data?.[0]?.imageURL) {
       imageUrl = response.data.data[0].imageURL;
     }
-    // Format 3: response.data.imageURL
     else if (response.data?.imageURL) {
       imageUrl = response.data.imageURL;
     }

@@ -31,16 +31,15 @@ export default function ImageGenerator({
 }: ImageGeneratorProps) {
   const [selectedStyle, setSelectedStyle] = useState<string>('realistic portrait');
   const [customStyle, setCustomStyle] = useState<string>('');
+  const [additionalDetails, setAdditionalDetails] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   
-  // Generate the image
   const handleGenerateImage = async () => {
     setIsLoading(true);
     setIsGenerating(true);
     setError('');
     
     try {
-      // Use custom style if "other" is selected, otherwise use the selected style
       const finalStyle = selectedStyle === 'other' ? customStyle : selectedStyle;
       
       if (selectedStyle === 'other' && !customStyle.trim()) {
@@ -56,7 +55,8 @@ export default function ImageGenerator({
           characterData: {
             name: character.name,
             title: character.title,
-            persona: character.persona,
+            persona: additionalDetails || character.persona,
+            originalDescription: character.originalDescription || '',
           },
           style: finalStyle,
         }),
@@ -128,7 +128,7 @@ export default function ImageGenerator({
                   character.exampleConversation.map((exchange, index) => (
                     <div key={index} className="conversation-exchange">
                       <p className="font-medium text-purple-700">User: {exchange.user}</p>
-                      <p className="ml-4">{exchange.character}</p>
+                      <p className="ml-4">{character.name}: {exchange.character}</p>
                     </div>
                   ))
                 ) : (
@@ -150,7 +150,7 @@ export default function ImageGenerator({
       <div className="info-box">
         <p>
           Now that your character details are ready, let's generate an avatar image for them.
-          Select a style and click the button below.
+          Select a style and add any specific details you want to include in the image.
         </p>
       </div>
       
@@ -186,6 +186,21 @@ export default function ImageGenerator({
           </p>
         </div>
       )}
+
+      <div className="form-group">
+        <label htmlFor="additionalDetails">Additional Image Details (Optional)</label>
+        <textarea
+          id="additionalDetails"
+          rows={3}
+          placeholder="Add specific details about how you want the character to appear in the image (e.g., holding a magnifying glass, wearing specific clothing, etc.)"
+          value={additionalDetails}
+          onChange={(e) => setAdditionalDetails(e.target.value)}
+          disabled={isLoading}
+        />
+        <p className="help-text">
+          These details will help create a more accurate image of your character.
+        </p>
+      </div>
       
       <div className="flex justify-center">
         <button

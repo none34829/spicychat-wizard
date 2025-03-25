@@ -8,5 +8,3 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>
 );
-
-// Initialize effects after render

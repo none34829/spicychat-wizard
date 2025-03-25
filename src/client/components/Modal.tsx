@@ -7,7 +7,6 @@ interface ModalProps {
 }
 
 export default function Modal({ isOpen, onClose, children }: ModalProps) {
-  // Close modal on escape key press
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -17,31 +16,23 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
     
     document.addEventListener('keydown', handleEscapeKey);
     
-    // Prevent body scroll when modal is open
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-    
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
-      document.body.style.overflow = 'unset';
     };
   }, [isOpen, onClose]);
   
   if (!isOpen) return null;
   
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black bg-opacity-50"
+        className="fixed inset-0 bg-black bg-opacity-50 pointer-events-auto"
         onClick={onClose}
       ></div>
       
       {/* Modal Content */}
-      <div className="bg-white rounded-lg shadow-xl z-10 max-w-md w-full mx-4">
+      <div className="bg-white rounded-lg shadow-xl z-10 max-w-md w-full mx-4 pointer-events-auto">
         {children}
       </div>
     </div>

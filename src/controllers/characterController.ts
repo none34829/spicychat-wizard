@@ -4,9 +4,9 @@ import { generateCharacterDetails } from '../services/groqService';
 import { extractContentFromUrl } from '../services/exaService';
 import { CharacterData } from '../types';
 
-// Validate the character generation request
 const GenerateCharacterSchema = z.object({
   description: z.string().min(10).max(1000),
+  relationship: z.string().min(5).max(200),
   url: z.string().url().optional(),
 });
 
@@ -23,9 +23,8 @@ export async function generateCharacter(req: Request, res: Response): Promise<vo
         return;
       }
       
-      const { description, url } = validationResult.data;
+      const { description, relationship, url } = validationResult.data;
       
-      // If URL is provided, extract content first
       let enhancedDescription = description;
       if (url) {
         try {
@@ -33,16 +32,19 @@ export async function generateCharacter(req: Request, res: Response): Promise<vo
           enhancedDescription = `${description}\n\nAdditional context from URL: ${extractedContent}`;
         } catch (error) {
           console.error('Error extracting content from URL:', error);
-          // Continue with original description if URL extraction fails
         }
       }
       
-      // Generate character details using Groq
-      const characterData = await generateCharacterDetails(enhancedDescription);
+      const characterData = await generateCharacterDetails(enhancedDescription, relationship);
+      
+      const finalCharacterData = {
+        ...characterData,
+        originalDescription: description
+      };
       
       res.status(200).json({
         status: 'success',
-        data: characterData
+        data: finalCharacterData
       });
     } catch (error) {
       console.error('Error generating character:', error);
@@ -53,7 +55,6 @@ export async function generateCharacter(req: Request, res: Response): Promise<vo
     }
   }
 
-// Extract character details from a URL
 export async function getCharacterFromUrl(req: Request, res: Response) {
   try {
     const { url } = req.body;
@@ -67,9 +68,9 @@ export async function getCharacterFromUrl(req: Request, res: Response) {
     
     const extractedContent = await extractContentFromUrl(url);
     
-    // Generate character based on extracted content
     const characterData = await generateCharacterDetails(
-      `Create a character based on the following content: ${extractedContent}`
+      `Create a character based on the following content: ${extractedContent}`,
+      "new acquaintance who recently met"
     );
     
     return res.status(200).json({

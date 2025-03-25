@@ -1,4 +1,3 @@
-// Character data interface
 export interface ConversationExchange {
   user: string;
   character: string;
@@ -10,11 +9,12 @@ export interface CharacterData {
   persona: string;
   greeting: string;
   scenario: string;
+  relationship: string;
   exampleConversation: ConversationExchange[];
+  originalDescription: string;
   [key: string]: string | ConversationExchange[];
 }
 
-// Response structure for API endpoints
 export interface ApiResponse<T = any> {
   status: 'success' | 'error';
   message?: string;

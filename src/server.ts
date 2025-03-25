@@ -10,12 +10,11 @@ import apiRoutes from './routes/api';
 export function createServer() {
   const app = express();
 
-  // Middleware
+  // middleware
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cors());
   
-  // Rate limiting
   const limiter = rateLimit({
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'), // 15 minutes
     max: parseInt(process.env.RATE_LIMIT_MAX || '25'), // limit each IP to 25 requests per windowMs
@@ -23,10 +22,8 @@ export function createServer() {
     legacyHeaders: false,
   });
   
-  // API routes with rate limiting
   app.use('/api', limiter, apiRoutes);
   
-  // Serve static files in production
   if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'client')));
     
@@ -35,7 +32,6 @@ export function createServer() {
     });
   }
   
-  // Error handling middleware
   app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
     console.error('Error details:', {
       message: err.message,
@@ -55,7 +51,6 @@ export function createServer() {
   return app;
 }
 
-// Start the server
 const app = createServer();
 const PORT = process.env.PORT || 3000;
 

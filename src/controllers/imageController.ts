@@ -2,17 +2,16 @@ import { Request, Response } from 'express';
 import { z } from 'zod';
 import { generateCharacterImage } from '../services/runwareService';
 
-// Validate the image generation request
 const GenerateImageSchema = z.object({
   characterData: z.object({
     name: z.string(),
     title: z.string(),
     persona: z.string(),
+    originalDescription: z.string(),
   }),
   style: z.string().optional(),
 });
 
-// Generate an image for a character
 export async function generateImage(req: Request, res: Response) {
   console.log('Image generation request received:', req.method, req.path);
   console.log('Request body:', JSON.stringify(req.body, null, 2));
@@ -31,11 +30,9 @@ export async function generateImage(req: Request, res: Response) {
     
     const { characterData, style = 'realistic portrait' } = validationResult.data;
     
-    // Create a prompt that includes the style
-    const prompt = `${style} of "${characterData.name}", ${characterData.title}. ${characterData.persona.substring(0, 200)}`;
+    const prompt = `${style} of ${characterData.name}, ${characterData.title}. ${characterData.originalDescription}. A detailed, high-quality image showing ${characterData.persona}`;
     console.log('Generated prompt:', prompt);
     
-    // Generate the image - pass empty string for style since it's already in the prompt
     console.log('Calling Runware API with prompt that includes style');
     const imageUrl = await generateCharacterImage(prompt, '');
     

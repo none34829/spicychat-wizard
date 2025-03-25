@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Exa API base URL
 const EXA_API_URL = 'https://api.exa.ai/contents';
 
 interface ExaContentParams {
@@ -32,9 +31,6 @@ interface ExaContentResult {
   summary?: string;
 }
 
-/**
- * Extract content from a URL using Exa's API
- */
 export async function extractContentFromUrl(url: string): Promise<string> {
   try {
     const params: ExaContentParams = {
@@ -64,20 +60,16 @@ export async function extractContentFromUrl(url: string): Promise<string> {
 
     const result: ExaContentResult = response.data.results[0];
     
-    // Extract text content from the response
     const content = result.text || '';
     
-    // Add summary if available
     const summary = result.summary ? `\n\nSummary: ${result.summary}` : '';
     
-    // Add highlights if available
     const highlights = result.highlights?.length 
       ? `\n\nKey points: ${result.highlights.join('\n- ')}` 
       : '';
     
     const fullContent = content + summary + highlights;
     
-    // Truncate if too long (to avoid token issues with LLM)
     return fullContent.length > 5000 ? fullContent.substring(0, 5000) + '...' : fullContent;
   } catch (error) {
     console.error('Error in Exa service:', error);
@@ -86,7 +78,7 @@ export async function extractContentFromUrl(url: string): Promise<string> {
 }
 
 /**
- * Extract content from multiple URLs using Exa's API
+ * extract content from multiple URLs using Exa's API
  */
 export async function extractContentFromUrls(urls: string[]): Promise<ExaContentResult[]> {
   try {

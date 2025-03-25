@@ -3,7 +3,7 @@ import { z } from 'zod';
 // URL validation
 export const urlValidator = z.string().url('Must be a valid URL');
 
-// Character data validation
+// character data validation
 export const characterDataValidator = z.object({
   name: z.string().min(1, 'Name is required'),
   title: z.string().min(1, 'Title is required'),
@@ -13,7 +13,7 @@ export const characterDataValidator = z.object({
   exampleConversation: z.string().min(50, 'Example conversation must be at least 50 characters'),
 });
 
-// Image generation validation
+// image generation validation
 export const imageGenerationValidator = z.object({
   prompt: z.string().min(10, 'Prompt must be at least 10 characters'),
   style: z.string().optional(),

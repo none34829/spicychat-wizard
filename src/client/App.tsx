@@ -28,28 +28,48 @@ export default function App() {
     }
   }, [activeStep]);
   
-  // Handle completion of character generation
   const handleCharacterGenerated = (data: CharacterData) => {
     setCharacterData(data);
     setActiveStep(2);
     setError('');
   };
   
-  // Handle image generation
   const handleImageGenerated = (url: string) => {
+    const scrollPosition = window.scrollY;
+    
     setImageUrl(url);
     setActiveStep(3);
     setError('');
+    
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: 'smooth'
+      });
+    });
   };
   
-  // Go back to previous step
   const handleBack = () => {
     if (activeStep > 1) {
+      // Store current scroll position
+      const scrollPosition = window.scrollY;
+      
+      // just clear the image URL but keep the character data
+      if (activeStep === 3) {
+        setImageUrl('');
+      }
+      
       setActiveStep(activeStep - 1);
+      
+      requestAnimationFrame(() => {
+        window.scrollTo({
+          top: scrollPosition,
+          behavior: 'smooth'
+        });
+      });
     }
   };
   
-  // Reset the wizard
   const handleReset = () => {
     setCharacterData(null);
     setImageUrl('');
@@ -57,25 +77,47 @@ export default function App() {
     setError('');
   };
   
-  // Handle export to SpicyChat
   const handleExport = () => {
     if (!characterData) return;
     
-    // Open SpicyChat in a new tab with query parameters
-    const params = new URLSearchParams({
+    const scrollPosition = window.scrollY;
+    
+    const formattedDialogue = Array.isArray(characterData.exampleConversation) 
+      ? characterData.exampleConversation
+          .map(exchange => `User: ${exchange.user}\n${characterData.name}: ${exchange.character}`)
+          .join('\n\n')
+      : characterData.exampleConversation;
+    
+    // character card data
+    const characterCard = {
       name: characterData.name,
       title: characterData.title,
-      persona: characterData.persona,
       greeting: characterData.greeting,
+      chatbot_personality: characterData.persona,
       scenario: characterData.scenario,
-      example_dialogue: JSON.stringify(characterData.exampleConversation),
+      relationship: characterData.relationship,
+      example_dialogue: formattedDialogue,
       image_url: imageUrl,
-    });
+    };
     
-    window.open(`https://spicychat.ai/chatbot/create?${params.toString()}`, '_blank');
+    // create and download JSON file
+    const blob = new Blob([JSON.stringify(characterCard, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${characterData.name.toLowerCase().replace(/\s+/g, '-')}-character-card.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
     
-    // Show success modal
     setShowModal(true);
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: scrollPosition,
+        behavior: 'smooth'
+      });
+    });
   };
   
   return (
@@ -154,13 +196,17 @@ export default function App() {
                   <label htmlFor="preview-title" className="font-medium text-gray-700">Title</label>
                   <p id="preview-title" className="mt-1">{characterData.title}</p>
                 </div>
-                <div>
-                  <label htmlFor="preview-persona" className="font-medium text-gray-700">Persona</label>
-                  <p id="preview-persona" className="mt-1 whitespace-pre-wrap">{characterData.persona}</p>
-                </div>
-                <div className="mt-4">
+                <div className="mb-4">
                   <label htmlFor="preview-greeting" className="font-medium text-gray-700">Greeting</label>
                   <p id="preview-greeting" className="mt-1 whitespace-pre-wrap">{characterData.greeting}</p>
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="preview-persona" className="font-medium text-gray-700">Chatbot's Personality</label>
+                  <p id="preview-persona" className="mt-1 whitespace-pre-wrap">{characterData.persona}</p>
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="preview-relationship" className="font-medium text-gray-700">Relationship</label>
+                  <p id="preview-relationship" className="mt-1">{characterData.relationship}</p>
                 </div>
                 <div className="mt-4">
                   <label htmlFor="preview-scenario" className="font-medium text-gray-700">Scenario</label>
@@ -213,7 +259,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* Success Modal */}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <div className="modal-content">
           <div className="mb-8">

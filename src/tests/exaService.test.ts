@@ -7,14 +7,12 @@ async function testExaService() {
   try {
     console.log('Testing Exa Service...');
     
-    // Test single URL extraction
     console.log('Testing single URL extraction...');
     const url = 'https://en.wikipedia.org/wiki/Artificial_intelligence';
     const content = await extractContentFromUrl(url);
     console.log('Successfully extracted content length:', content.length);
     console.log('Content preview:', content.substring(0, 200) + '...');
     
-    // Test multiple URL extraction
     console.log('\nTesting multiple URL extraction...');
     const urls = [
       'https://en.wikipedia.org/wiki/Artificial_intelligence',
@@ -42,5 +40,4 @@ async function testExaService() {
   }
 }
 
-// Run the test
 testExaService(); 

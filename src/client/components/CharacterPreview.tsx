@@ -9,7 +9,6 @@ interface CharacterPreviewProps {
 export default function CharacterPreview({ character, className }: CharacterPreviewProps) {
   const [expandedSection, setExpandedSection] = useState<string | null>(null);
   
-  // Toggle section expansion
   const toggleSection = (section: string) => {
     if (expandedSection === section) {
       setExpandedSection(null);
@@ -23,7 +22,6 @@ export default function CharacterPreview({ character, className }: CharacterPrev
       <h2 className="text-xl font-semibold mb-4">Character Preview</h2>
       
       <div className="border rounded-lg overflow-hidden">
-        {/* Header */}
         <div className="bg-purple-100 px-4 py-3 border-b">
           <h3 className="text-lg font-semibold">{character.name}</h3>
           <p className="text-sm text-gray-600">{character.title}</p>

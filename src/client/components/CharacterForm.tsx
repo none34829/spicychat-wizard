@@ -11,11 +11,11 @@ interface CharacterFormProps {
 
 export default function CharacterForm({ onGenerate, setIsGenerating, setError, className }: CharacterFormProps) {
   const [description, setDescription] = useState<string>('');
+  const [relationship, setRelationship] = useState<string>('');
   const [url, setUrl] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isUrlValid, setIsUrlValid] = useState<boolean>(true);
   
-  // Validate URL
   const validateUrl = (value: string) => {
     if (!value) {
       setIsUrlValid(true);
@@ -30,20 +30,22 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
     }
   };
   
-  // Handle URL change
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setUrl(value);
     validateUrl(value);
   };
   
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    // Ensure we prevent default at the very start
     if (e) e.preventDefault();
     
     if (!description.trim()) {
       setError('Please provide a character description');
+      return;
+    }
+
+    if (!relationship.trim()) {
+      setError('Please specify your relationship with the character');
       return;
     }
     
@@ -64,6 +66,7 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
         },
         body: JSON.stringify({
           description,
+          relationship,
           url: url.trim() || undefined,
         }),
       });
@@ -118,6 +121,22 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
         </div>
         
         <div className="form-group">
+          <label htmlFor="relationship">Your Relationship with the Character*</label>
+          <input
+            type="text"
+            id="relationship"
+            placeholder="How do you know this character? (e.g., 'old friends from college', 'my mentor', 'regular customers at the same café')"
+            value={relationship}
+            onChange={(e) => setRelationship(e.target.value)}
+            required
+            disabled={isLoading}
+          />
+          <p className="help-text">
+            This will help set the tone for your interactions with the character.
+          </p>
+        </div>
+        
+        <div className="form-group">
           <label htmlFor="url">Reference URL (Optional)</label>
           <input
             type="url"
@@ -135,7 +154,7 @@ export default function CharacterForm({ onGenerate, setIsGenerating, setError, c
         <div className="flex justify-center">
           <button
             type="submit"
-            disabled={isLoading || !description.trim() || (url.trim() !== '' && !isUrlValid)}
+            disabled={isLoading || !description.trim() || !relationship.trim() || (url.trim() !== '' && !isUrlValid)}
             className="btn btn-primary btn-lg"
           >
             {isLoading ? (

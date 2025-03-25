@@ -1,6 +1,3 @@
-/* Modern UI styling with better gradients and effects */
-
-/* Base styles */
 body, html {
   font-family: 'Inter', sans-serif;
   background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 100%);
@@ -26,7 +23,6 @@ body, html {
   padding: 1rem;
 }
 
-/* Glass morphism effect for cards */
 .bg-white, div[class*="rounded"], .wizard-card {
   background: rgba(255, 255, 255, 0.85) !important;
   backdrop-filter: blur(12px) !important;
@@ -37,7 +33,6 @@ body, html {
   transition: all 0.3s ease !important;
 }
 
-/* Headings with gradient */
 h1.gradient-text {
   font-size: 4rem !important;
   background: linear-gradient(135deg, #8b0000 0%, #ff1493 50%, #450920 100%) !important;
@@ -66,7 +61,6 @@ header p {
 }
 
 
-/* Base button styles */
 .btn {
   display: inline-flex !important;
   align-items: center !important;
@@ -82,7 +76,6 @@ header p {
   min-width: 140px !important;
 }
 
-/* Primary action button (Export, Generate, etc) */
 .btn-primary {
   background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%) !important;
   color: rgb(255, 255, 255) !important;
@@ -99,7 +92,6 @@ header p {
   transform: translateY(0) !important;
 }
 
-/* Back button */
 .btn-back {
   background: linear-gradient(135deg, #1c1c1c, #2a2a2a) !important; /* Dark gradient for navigation */
   color: #ffffff !important;
@@ -115,7 +107,6 @@ header p {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
 }
 
-/* Reset button */
 .btn-reset {
   background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%) !important;
   color: white !important;
@@ -128,7 +119,6 @@ header p {
   background: linear-gradient(135deg, #f87171 0%, #fb7185 100%) !important;
 }
 
-/* Disabled state for all buttons */
 .btn:disabled {
   opacity: 0.5 !important;
   cursor: not-allowed !important;
@@ -136,35 +126,30 @@ header p {
   box-shadow: none !important;
 }
 
-/* Button icon styling */
 .btn svg {
   width: 20px !important;
   height: 20px !important;
   stroke-width: 2px !important;
 }
 
-/* Button group styling */
 .button-group {
   display: flex !important;
   gap: 1rem !important;
   margin-top: 2rem !important;
 }
 
-/* Large primary button (for main actions) */
 .btn-lg {
   padding: 1rem 2rem !important;
   font-size: 1rem !important;
   min-width: 180px !important;
 }
 
-/* Small button variant */
 .btn-sm {
   padding: 0.5rem 1rem !important;
   font-size: 0.75rem !important;
   min-width: 100px !important;
 }
 
-/* Success button (for modals) */
 .btn-success {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
   color: white !important;
@@ -177,7 +162,6 @@ header p {
   background: linear-gradient(135deg, #34d399 0%, #10b981 100%) !important;
 }
 
-/* Form container styling */
 .form-container {
   background: rgba(255, 255, 255, 0.95) !important;
   backdrop-filter: blur(12px) !important;
@@ -195,7 +179,6 @@ header p {
   box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2) !important;
 }
 
-/* Form section headings */
 .form-section-title {
   font-size: 1.5rem !important;
   font-weight: 700 !important;
@@ -212,7 +195,6 @@ header p {
   color: #7c3aed !important;
 }
 
-/* Form inputs with better styling */
 input, textarea, select {
   width: 100% !important;
   padding: 1rem 1.25rem !important;
@@ -238,7 +220,6 @@ input:focus, textarea:focus, select:focus {
   background: white !important;
 }
 
-/* Form labels */
 label {
   display: block !important;
   font-weight: 600 !important;
@@ -247,7 +228,6 @@ label {
   font-size: 0.875rem !important;
 }
 
-/* Help text */
 .help-text {
   color: #6b7280 !important;
   font-size: 0.875rem !important;
@@ -255,12 +235,10 @@ label {
   line-height: 1.4 !important;
 }
 
-/* Form group spacing */
 .form-group {
   margin-bottom: 1.5rem !important;
 }
 
-/* Select dropdown styling */
 select {
   appearance: none !important;
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
@@ -270,7 +248,6 @@ select {
   padding-right: 2.5rem !important;
 }
 
-/* Character preview section */
 .character-preview {
   background: rgba(255, 255, 255, 0.95) !important;
   border-radius: 24px !important;
@@ -289,7 +266,6 @@ select {
   margin-bottom: 1rem !important;
 }
 
-/* Info box styling */
 .info-box {
   background: rgba(124, 58, 237, 0.1) !important;
   border-radius: 12px !important;
@@ -305,7 +281,6 @@ select {
   margin: 0 !important;
 }
 
-/* Progress steps container */
 .progress-steps {
   position: relative;
   display: flex;
@@ -386,8 +361,6 @@ select {
   white-space: nowrap;
 }
 
-
-/* Loading animation */
 .loader {
   width: 24px;
   height: 24px;
@@ -401,7 +374,6 @@ select {
   to { transform: rotate(360deg); }
 }
 
-/* Card hover effects */
 .card-hover {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -411,7 +383,6 @@ select {
   box-shadow: 0 12px 40px rgba(31, 38, 135, 0.2);
 }
 
-/* Image preview with better styling */
 .image-preview {
   border-radius: 16px;
   overflow: hidden;
@@ -429,7 +400,6 @@ select {
   transform: scale(1.05);
 }
 
-/* Success modal with better styling */
 .modal-content {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(10px);
@@ -441,7 +411,6 @@ select {
   margin: 2rem auto;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   h1 {
     font-size: 2.5rem !important;
@@ -456,7 +425,6 @@ select {
   }
 }
 
-/* Character details card */
 .character-details-card {
   background: rgba(255, 255, 255, 0.95) !important;
   border-radius: 16px !important;
@@ -488,7 +456,6 @@ select {
   margin-bottom: 1.5rem !important;
 }
 
-/* Conversation exchanges */
 .conversation-exchange {
   background: rgba(255, 255, 255, 0.5) !important;
   padding: 1rem !important;
